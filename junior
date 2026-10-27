@@ -1,0 +1,14 @@
+mkdir mening-loyiham && cd mening-loyiham
+git init
+echo "<!DOCTYPE html><html><head><title>Loyiham</title></head><body><h1>Mening loyiham</h1>" > index.html
+git add index.html
+git commit -m "First commit: HTML va h1 qo'shildi"
+echo "<p>Git darslari amaliyoti</p>" >> index.html
+git add index.html
+git commit -m "Second commit: Paragraf qo'shildi"
+echo "<span>Junior IT Academy</span></body></html>" >> index.html
+git add index.html
+git commit -m "Third commit: Yakuniy kontent"
+git checkout -b ismingiz
+git remote add origin github_linki
+git push -u origin ismingiz
