@@ -1,0 +1,54 @@
+<h1>Artificial intelligence & Cyber security</h1>
+
+<div class="hero-image-container">
+    <img src="cyber-security.png" alt="AI & Cyber Security">
+</div>
+
+<div class="logo-wrapper">
+    <img src="logoipsum.png" alt="Logo">
+</div>
+body {
+    background-color: #0d1117;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.card {
+    background: linear-gradient(145deg, #0f172a, #1e293b);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 40px;
+    width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.hero-image-container {
+    margin: 30px 0;
+}
+
+.hero-image-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.logo-wrapper {
+    margin-top: 20px;
+    opacity: 0.7;
+}
+
+.logo-wrapper img {
+    height: 30px;
+}
