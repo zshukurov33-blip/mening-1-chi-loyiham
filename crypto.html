@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto & Valyuta Trekeri</title>
+    
+    <script src="https://jsdelivr.net"></script>
+    
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen p-6">
+
+    <div class="max-w-5xl mx-auto">
+       
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-yellow-400 mb-2">💰 Crypto & Valyuta Trekeri</h1>
+            <p class="text-gray-400">Jonli va real vaqtdagi global hamda O'zbekistondagi valyuta kurslari</p>
+        </header>
+
+       
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg hover:border-yellow-400 transition duration-300">
+                <h3 class="text-gray-400 font-medium">Bitcoin (BTC)</h3>
+                <p id="btc-price" class="text-3xl font-bold text-white my-2">Yuklanmoqda...</p>
+                <span class="text-green-400 text-sm">Global Narx (USD)</span>
+            </div>
+            
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg hover:border-purple-500 transition duration-300">
+                <h3 class="text-gray-400 font-medium">Ethereum (ETH)</h3>
+                <p id="eth-price" class="text-3xl font-bold text-white my-2">Yuklanmoqda...</p>
+                <span class="text-green-400 text-sm">Global Narx (USD)</span>
+            </div>
+           
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg hover:border-blue-500 transition duration-300">
+                <h3 class="text-gray-400 font-medium">AQSH Dollari (USD)</h3>
+                <p id="usd-uzs" class="text-3xl font-bold text-yellow-400 my-2">Yuklanmoqda...</p>
+                <span class="text-blue-400 text-sm">O'zbekiston So'mi (UZS)</span>
+            </div>
+        </div>
+
+       
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-white">📈 Bitcoin Narx Trendi (Oxirgi 7 kun)</h2>
+            <div class="relative h-96 w-full">
+                <canvas id="cryptoChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchPrices() {
+            try {
+           
+                const cryptoRes = await fetch('https://coingecko.com');
+                const cryptoData = await cryptoRes.json();
+                
+                document.getElementById('btc-price').innerText = '$' + cryptoData.bitcoin.usd.toLocaleString();
+                document.getElementById('eth-price').innerText = '$' + cryptoData.ethereum.usd.toLocaleString();
+
+               
+                const fiatRes = await fetch('https://er-api.com');
+                const fiatData = await fiatRes.json();
+                const uzsRate = fiatData.rates.UZS;
+                
+                document.getElementById('usd-uzs').innerText = uzsRate.toLocaleString() + ' UZS';
+
+            } catch (error) {
+                console.error("Ma'lumot olishda xatolik yuz berdi:", error);
+                document.getElementById('btc-price').innerText = "Xatolik!";
+                document.getElementById('eth-price').innerText = "Xatolik!";
+                document.getElementById('usd-uzs').innerText = "Xatolik!";
+            }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('cryptoChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan', 'Yak'],
+                    datasets: [{
+                        label: 'BTC Narxi ($)',
+                        data:, 
+                        borderColor: '#facc15',
+                        backgroundColor: 'rgba(250, 204, 21, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#facc15',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: 'white' } }
+                    },
+                    scales: {
+                        y: { grid: { color: '#374151' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { color: '#374151' }, ticks: { color: '#9ca3af' } }
+                    }
+                }
+            });
+        }
+
+  
+        window.onload = function() {
+            fetchPrices();
+            initChart();
+            setInterval(fetchPrices, 60000);
+        };
+    </script>
+</body>
+</html>
