@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruhshona uchun maxsus ✨</title>
+    <title>Ruhshona ✨</title>
     <style>
         * {
             margin: 0;
@@ -14,294 +14,356 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #050510;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1200px;
+            color: white;
             user-select: none;
-            color: white;
         }
 
-        /* Orqa fondagi miltillovchi yulduzlar */
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle linear infinite;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* Ichkariga kirib ketuvchi sahnalar (3D Zoom) */
-        .scene {
-            position: absolute;
-            width: 90%;
-            max-width: 380px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 105, 180, 0.2);
-            border-radius: 30px;
-            padding: 40px 25px;
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.3) translateZ(-500px);
-            pointer-events: none;
-            transition: all 0.9s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 10;
-        }
-
-        /* Hozirgi ko'rinib turgan sahna */
-        .scene.active {
-            opacity: 1;
-            transform: scale(1) translateZ(0px);
-            pointer-events: auto;
-        }
-
-        /* Bosilganda ekranga yaqinlashib, ichkariga o'tib ketish effekti */
-        .scene.zoom-out {
-            opacity: 0;
-            transform: scale(2.8) translateZ(400px);
-            pointer-events: none;
-        }
-
-        .emoji-big {
-            font-size: 60px;
-            margin-bottom: 15px;
-            display: inline-block;
-            filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8));
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(5deg); }
-        }
-
-        h1 {
-            font-size: 26px;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffecd2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #f1f2f6;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #ff0844 0%, #ffb199 100%);
-            border: none;
-            padding: 15px 35px;
-            border-radius: 50px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 8, 68, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(255, 8, 68, 0.7);
-        }
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Salyut va uchqunlar uchun Canvas */
+        /* Orqa fondagi koinot va salyutlar */
         canvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 5;
+            z-index: 1;
         }
 
-        /* Oxirgi sahnadagi yurak urishi */
-        .heart-beat {
-            animation: heartbeat 1.2s infinite;
+        /* Asosiy oyna konteyneri */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
         }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 32px;
+            padding: 45px 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 42, 133, 0.3);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+        }
+
+        /* Ichkariga sho'ng'ish animatsiyasi */
+        .card.dive-out {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+
+        .card.dive-in {
+            transform: scale(0.4);
+            opacity: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 42, 133, 0.25);
+            border: 1px solid #ff2a85;
+            color: #ff85b8;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .icon {
+            font-size: 68px;
+            margin-bottom: 15px;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(255, 42, 133, 0.8));
+            animation: bounce 2.5s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, #ff85b8, #ffd1dc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.65;
+            color: #e0e0e0;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff2a85 0%, #ff7a59 100%);
+            color: white;
+            border: none;
+            padding: 16px 38px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 42, 133, 0.5);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 42, 133, 0.7);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            width: 24px;
+            border-radius: 10px;
+            background: #ff2a85;
         }
     </style>
 </head>
 <body>
 
-<canvas id="fireworks"></canvas>
+<canvas id="space"></canvas>
 
-<!-- 1-Sahna -->
-<div class="scene active" id="scene-1">
-    <div class="emoji-big">🎁</div>
-    <h1>Salom, Ruhshona!</h1>
-    <p>Siz uchun kichik, lekin juda sehrli bir dunyo tayyorladim. Ichkariga kirishga tayyormisiz?</p>
-    <button class="btn" onclick="goNext(1)">Ichkariga kirish ✨</button>
-</div>
-
-<!-- 2-Sahna -->
-<div class="scene" id="scene-2">
-    <div class="emoji-big">🌸</div>
-    <h1>Bilasizmi, Ruhshona...</h1>
-    <p>Ba'zi insonlar shunchaki borligi bilan atrofdagilarga bahor kayfiyatini ulashadi. Siz ana shunday betakror insonsiz!</p>
-    <button class="btn" onclick="goNext(2)">Davom etish 🦋</button>
-</div>
-
-<!-- 3-Sahna -->
-<div class="scene" id="scene-3">
-    <div class="emoji-big">✨</div>
-    <h1>Sizning tabassumingiz</h1>
-    <p>Eng bulutli kunni ham quyoshdek yoritib yuborishga qodir. Tabassum qilishni hech qachon to‘xtatmang, u sizga juda yarashadi!</p>
-    <button class="btn" onclick="goNext(3)">Yana ichkariga 💫</button>
-</div>
-
-<!-- 4-Sahna -->
-<div class="scene" id="scene-4">
-    <div class="emoji-big">👑</div>
-    <h1>Eng yaxshi tilaklar</h1>
-    <p>Hayotingizdagi har bir kun xuddi ertaklardagidek go‘zal, quvonchli va unutilmas lahzalarga boy bo‘lsin!</p>
-    <button class="btn" onclick="goNext(4)">Oxirgi syurpriz 💖</button>
-</div>
-
-<!-- 5-Sahna (Yakuniy) -->
-<div class="scene" id="scene-5">
-    <div class="emoji-big heart-beat">💖</div>
-    <h1>Doimo baxtli bo‘ling, Ruhshona!</h1>
-    <p>Siz dunyodagi eng go‘zal baxtga loyiqsiz! Ekranga barmog‘ingizni tekkizing — bu salyutlar faqat siz uchun! 🎆</p>
-    <button class="btn" onclick="restart()">Boshidan ko‘rish 🔄</button>
+<div class="container">
+    <div class="card" id="card">
+        <div class="badge" id="step-badge">1 / 5 QADAM</div>
+        <span class="icon" id="card-icon">✨</span>
+        <h1 id="card-title">Salom, Ruhshona!</h1>
+        <p id="card-text">Siz uchun kichik bir koinot yaratdim. Ichkariga sho‘ng‘ishga tayyormisiz?</p>
+        <button class="btn" id="next-btn">Ichkariga kirish 🚀</button>
+        <div class="dots" id="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Orqa fonda yulduzlar yaratish
-    for (let i = 0; i < 80; i++) {
-        let star = document.createElement('div');
-        star.className = 'star';
-        let size = Math.random() * 3 + 1 + 'px';
-        star.style.width = size;
-        star.style.height = size;
-        star.style.left = Math.random() * 100 + 'vw';
-        star.style.top = Math.random() * 100 + 'vh';
-        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        document.body.appendChild(star);
-    }
-
-    let isFinal = false;
-
-    // Sahnalarni ichkariga kirib ketish effekti bilan almashtirish
-    function goNext(current) {
-        const currentScene = document.getElementById('scene-' + current);
-        const nextScene = document.getElementById('scene-' + (current + 1));
-
-        currentScene.classList.remove('active');
-        currentScene.classList.add('zoom-out');
-
-        // Tugma bosilganda kichik salyut
-        launchFirework(window.innerWidth / 2, window.innerHeight / 2);
-
-        setTimeout(() => {
-            nextScene.classList.add('active');
-            if (current + 1 === 5) {
-                isFinal = true;
-                startCelebration();
-            }
-        }, 300);
-    }
-
-    function restart() {
-        isFinal = false;
-        for (let i = 1; i <= 5; i++) {
-            const s = document.getElementById('scene-' + i);
-            s.classList.remove('active', 'zoom-out');
+    // 5 ta sahna ma'lumotlari
+    const steps = [
+        {
+            badge: "1 / 5 QADAM",
+            icon: "✨",
+            title: "Salom, Ruhshona!",
+            text: "Siz uchun kichik bir koinot yaratdim. Ichkariga sho‘ng‘ishga tayyormisiz?",
+            btn: "Ichkariga kirish 🚀"
+        },
+        {
+            badge: "2 / 5 QADAM",
+            icon: "🌸",
+            title: "Noyob Qalb Egasi",
+            text: "Dunyoda milliardlab insonlar bor, lekin sizning samimiyligingiz va mehringiz hammasidan ajralib turadi.",
+            btn: "Yana chuqurroq 💫"
+        },
+        {
+            badge: "3 / 5 QADAM",
+            icon: "🦋",
+            title: "Sehrli Tabassum",
+            text: "Siz kulganingizda atrofdagi barcha g‘am-tashvishlar unutiladi. Tabassumingizni hech qachon yo‘qotmang!",
+            btn: "Keyingi bekat 🌟"
+        },
+        {
+            badge: "4 / 5 QADAM",
+            icon: "👑",
+            title: "Haqiqiy Malika",
+            text: "Har bir orzuingiz ro‘yobga chiqishini, hayotingiz esa faqat quvonchli kunlardan iborat bo‘lishini tilayman.",
+            btn: "Syurprizni ochish 🎁"
+        },
+        {
+            badge: "YAKUNIY SYURPRIZ",
+            icon: "💖",
+            title: "Baxtli bo‘ling, Ruhshona!",
+            text: "Siz eng go‘zal baxtga loyiqsiz! Ekranga barmog‘ingizni tekkizing — bu yulduzlar va salyutlar siz uchun! 🎆",
+            btn: "Qaytadan uchish 🔄"
         }
+    ];
+
+    let currentStep = 0;
+    let warpSpeed = 2; // Yulduzlar tezligi
+
+    const card = document.getElementById('card');
+    const badge = document.getElementById('step-badge');
+    const icon = document.getElementById('card-icon');
+    const title = document.getElementById('card-title');
+    const text = document.getElementById('card-text');
+    const btn = document.getElementById('next-btn');
+    const dots = document.querySelectorAll('.dot');
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Kosmik tezlikni oshirish (ichkariga sho'ng'ish effekti)
+        warpSpeed = 35;
+        card.classList.add('dive-out');
+
+        // Markazda salyut otish
+        createFirework(window.innerWidth / 2, window.innerHeight / 2);
+
         setTimeout(() => {
-            document.getElementById('scene-1').classList.add('active');
-        }, 200);
-    }
+            currentStep = (currentStep + 1) % steps.length;
+            const data = steps[currentStep];
 
-    // Haqiqiy Salyut (Fireworks) fizikasi
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+            badge.innerText = data.badge;
+            icon.innerText = data.icon;
+            title.innerText = data.title;
+            text.innerText = data.text;
+            btn.innerText = data.btn;
 
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+            dots.forEach((d, idx) => {
+                d.classList.toggle('active', idx === currentStep);
+            });
+
+            card.classList.remove('dive-out');
+            card.classList.add('dive-in');
+
+            setTimeout(() => {
+                card.classList.remove('dive-in');
+                warpSpeed = currentStep === 4 ? 6 : 2;
+                if (currentStep === 4) {
+                    launchFinalFireworks();
+                }
+            }, 50);
+
+        }, 450);
     });
 
-    let particles = [];
+    // Koinot tunneli (3D Starfield) va Salyutlar
+    const canvas = document.getElementById('space');
+    const ctx = canvas.getContext('2d');
+    let w, h;
 
-    class Particle {
-        constructor(x, y, color) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 6 + 2;
-            this.vx = Math.cos(angle) * speed;
-            this.vy = Math.sin(angle) * speed;
-            this.alpha = 1;
-            this.decay = Math.random() * 0.015 + 0.015;
-            this.gravity = 0.08;
-        }
-        update() {
-            this.vx *= 0.98;
-            this.vy *= 0.98;
-            this.vy += this.gravity;
-            this.x += this.vx;
-            this.y += this.vy;
-            this.alpha -= this.decay;
-        }
-        draw() {
-            ctx.save();
-            ctx.globalAlpha = this.alpha;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-            ctx.restore();
-        }
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const stars = [];
+    for (let i = 0; i < 250; i++) {
+        stars.push({
+            x: (Math.random() - 0.5) * 2000,
+            y: (Math.random() - 0.5) * 2000,
+            z: Math.random() * 2000,
+            color: ['#ffffff', '#ff85b8', '#ffd1dc', '#a29bfe'][Math.floor(Math.random() * 4)]
+        });
     }
 
-    function launchFirework(x, y) {
-        const colors = ['#ff0844', '#ffb199', '#ff9a9e', '#fad0c4', '#ffd700', '#ff69b4', '#00f2fe'];
+    let fireworks = [];
+
+    function createFirework(x, y) {
+        const colors = ['#ff2a85', '#ff7a59', '#ffd700', '#00f2fe', '#ff85b8', '#ffffff'];
         const color = colors[Math.floor(Math.random() * colors.length)];
-        for (let i = 0; i < 45; i++) {
-            particles.push(new Particle(x, y, color));
+        for (let i = 0; i < 50; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 7 + 2;
+            fireworks.push({
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                alpha: 1,
+                color: color,
+                size: Math.random() * 3 + 1.5
+            });
         }
     }
 
-    function animate() {
-        ctx.fillStyle = 'rgba(9, 10, 15, 0.2)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        for (let i = particles.length - 1; i >= 0; i--) {
-            particles[i].update();
-            particles[i].draw();
-            if (particles[i].alpha <= 0) {
-                particles.splice(i, 1);
+    function launchFinalFireworks() {
+        let count = 0;
+        const timer = setInterval(() => {
+            if (currentStep !== 4 || count > 12) {
+                clearInterval(timer);
+                return;
             }
-        }
-        requestAnimationFrame(animate);
+            createFirework(Math.random() * w, Math.random() * (h * 0.6));
+            count++;
+        }, 450);
     }
-    animate();
 
-    // Ekranga barmoq/sichqoncha tekkanda salyut otilishi
     document.addEventListener('click', (e) => {
+        createFirework(e.clientX, e.clientY);
+    });
+
+    function render() {
+        ctx.fillStyle = 'rgba(5, 5, 16, 0.35)';
+        ctx.fillRect(0, 0, w, h);
+
+        const cx = w / 2;
+        const cy = h / 2;
+
+        // Yulduzlarni chizish
+        for (let s of stars) {
+            s.z -= warpSpeed;
+if (s.z <= 1) {
+s.z = 2000;
+s.x = (Math.random() - 0.5) * 2000;
+s.y = (Math.random() - 0.5) * 2000;
+}
+const sx = cx + (s.x / s.z) * 500;
+const sy = cy + (s.y / s.z) * 500;
+const size = (1 - s.z / 2000) * 4;
+ctx.beginPath();
+ctx.arc(sx, sy, Math.max(0.5, size), 0, Math.PI * 2);
+ctx.fillStyle = s.color;
+ctx.fill();
+}
+// Salyut uchqunlarini chizish
+for (let i = fireworks.length - 1; i >= 0; i--) {
+let f = fireworks[i];
+f.x += f.vx;
+f.y += f.vy;
+f.vy += 0.08;
+f.vx *= 0.97;
+f.vy *= 0.97;
+f.alpha -= 0.018;
+if (f.alpha <= 0) {
+fireworks.splice(i, 1);
+continue;
+}
+ctx.save();
+ctx.globalAlpha = f.alpha;
+ctx.beginPath();
+ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+ctx.fillStyle = f.color;
+ctx.fill();
+ctx.restore();
+}
+requestAnimationFrame(render);
+}
+render();
